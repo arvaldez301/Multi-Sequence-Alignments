@@ -5,7 +5,13 @@
 library(msa)
 ```
 ## Step 2: Set Path to the Fasta File
-We are using the ```msa``` package to pull example files.
+We are using the ```msa``` package to pull example files. To view the files that the ```msa``` package has to over you can use the following code:
+```
+package_dir <- system.file("extdata", package = "DECIPHER")
+files <- list.files(package_dir)
+print(files)
+```
+Once selecting a file from the practice data you can load it using the code below:
 
 ```
 seq <- system.file("examples", "exampleAA.fasta", package = "msa")
