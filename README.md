@@ -5,13 +5,16 @@
 library(msa)
 ```
 ## Step 2: Set Path to the Fasta File
-We are using the ```msa``` package to pull example files. If you wish to load your own use your file path.
+We are using the ```msa``` package to pull example files.
 
 ```
 seq <- system.file("examples", "exampleAA.fasta", package = "msa")
 ```
-
-You need to replace `"<<path to FASTA file>>"` with the actual path to your FASTA file on your computer if you are using your own
+If you wish to up load your own file path use the following:
+```
+seq <- "<<<path to FASTA file>>>"
+```
+You need to replace ```"<<path to FASTA file>>"``` with the actual path to your FASTA file on your computer if you are using your own
 
 ## Step 3: Read the Sequences and Perfrom the Alignment
 
