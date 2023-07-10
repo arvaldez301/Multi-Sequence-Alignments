@@ -1,0 +1,124 @@
+---
+title: "Week 4 - Multi Sequence Alignment and Visualizations"
+output: word_document
+date: "2023-06-28"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#For one file with multiple sequences
+library(msa)
+
+package_dir <- system.file("examples", package = "msa")
+files <- list.files(package_dir)
+print(files)
+
+seq <- system.file("examples", "exampleAA.fasta", package = "msa") #for practice files
+
+seq <- "<<path to FASTA file>>" #This will be the long code for where your file is on your computer
+
+sequences <- readAAStringSet(seq)
+
+#you can change readDNAStringSet to readAAStringSet or readRNAStringSet, depending on the type of sequence you are looking at
+
+alignment1 <- msa(sequences)
+#You can add a method command at the end to signify which type of alignment you wish to do
+#msa(sequences, method = "ClustalOmega")
+#You can choose between "ClustalW", "ClustalOmega" or "Muscle
+alignment2 <- msa(sequences, method = "Muscle")
+alignment3 <- msa(sequences, method = "ClustalW")
+
+#lets compare the two
+print(alignment2)
+print(alignment3)
+
+#Commmnd for some custom parameters
+msa(sequences, method="Muscle", gapOpening=12, gapExtension=3, maxiters=16,
+    cluster="upgmamax", SUEFF=0.4, brenner=FALSE,
+    order="input", verbose=FALSE)
+
+print(alignment)
+```
+
+## Trimming Sequences
+```{r}
+library(msa)
+
+#Example using DECIPHER for Example Data
+library(DECIPHER)
+
+# Read the DNA sequences from a file
+fas <- system.file("extdata", "50S_ribosomal_protein_L2.fas", package = "DECIPHER")
+dna <- readDNAStringSet(fas)
+dna
+
+# Trim the DNA sequences
+trimmed_dna1 <- TrimDNA(dna,
+                        leftPatterns = "",
+                        rightPatterns = "",
+                        type = "sequences",
+                        quality = NULL) # Assuming you don't have quality scores
+
+
+#To specify if you want to trim very specific patterns from your sequences. 
+trimmed_dna2 <- TrimDNA(dna,
+                        leftPatterns = "CTAAA",
+                        rightPatterns = "",
+                        type = "sequences",
+                        quality = NULL)
+
+#Lets compare!
+print(trimmed_dna1)
+print(trimmed_dna2)
+```
+
+```{r}
+#Example using Biostrings for Example Data
+library(Biostrings)
+
+# example of trimming a FASTQ file by quality scores
+fpath <- system.file("extdata",
+	"s_1_sequence.txt",
+	package="Biostrings")
+
+reads <- readQualityScaledDNAStringSet(fpath)
+
+trimmed <- TrimDNA(reads,
+	leftPatterns="",
+	rightPatterns="",
+	type="sequences",
+	quality=quality(reads))
+
+print(trimmed)
+
+DNAStringSet(trimmed) # drop the qualities
+```
+
+
+##ggmsa Tutorial
+```{r}
+#Set the repositories to use all CRAN and BioC functions, this is for working with the msa package
+setRepositories()
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("ggmsa")
+
+library(ggmsa)
+
+available_msa()
+available_colors()
+
+ protein_sequences <- system.file("extdata", "sample.fasta", package = "ggmsa")
+ miRNA_sequences <- system.file("extdata", "seedSample.fa", package = "ggmsa")
+ nt_sequences <- system.file("extdata", "LeaderRepeat_All.fa", package = "ggmsa")
+ 
+ggmsa(protein_sequences, 300, 350, color = "Clustal", 
+      font = "DroidSansMono", char_width = 0.5, seq_name = TRUE )
+
+
+ggmsa(protein_sequences, 221, 280, seq_name = TRUE, char_width = 0.5) + geom_seqlogo(color = "Taylor_AA") + geom_msaBar()
+ 
+```
