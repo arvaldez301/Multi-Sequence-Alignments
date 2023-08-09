@@ -4,6 +4,10 @@
 ```
 library(msa)
 ```
+If your R verison is not allowing for the download of the msa package please use the following:
+```
+BiocManager::install("msa")
+```
 ## Step 2: Set Path to the Fasta File
 We are using the ```msa``` package to pull example files. To view the files that the ```msa``` package has to over you can use the following code:
 ```
